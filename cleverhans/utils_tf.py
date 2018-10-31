@@ -14,7 +14,6 @@ import numpy as np
 import six
 from six.moves import xrange
 import tensorflow as tf
-from tensorflow.python.client import device_lib
 
 from cleverhans.compat import reduce_sum, reduce_mean
 from cleverhans.compat import reduce_max
@@ -521,6 +520,7 @@ def get_available_gpus():
   """
   Returns a list of string names of all available GPUs
   """
+  from tensorflow.python.client import device_lib
   local_device_protos = device_lib.list_local_devices()
   return [x.name for x in local_device_protos if x.device_type == 'GPU']
 
