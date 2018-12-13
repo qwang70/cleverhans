@@ -18,7 +18,8 @@ from tensorflow.python.platform import flags
 
 from cleverhans.attacks import FastGradientMethod
 from cleverhans.attacks_tf import jacobian_graph, jacobian_augmentation
-from cleverhans.dataset import MNIST
+### IMPORT BINARY MNIST ###
+from cleverhans.dataset import MNIST, MNIST_67
 from cleverhans.initializers import HeReLuNormalInitializer
 from cleverhans.loss import CrossEntropy
 from cleverhans.model import Model
@@ -32,7 +33,7 @@ from cleverhans_tutorials.tutorial_models import ModelBasicCNN
 
 FLAGS = flags.FLAGS
 
-NB_CLASSES = 10
+NB_CLASSES = 2
 BATCH_SIZE = 128
 LEARNING_RATE = .001
 NB_EPOCHS = 10
@@ -42,6 +43,8 @@ NB_EPOCHS_S = 10
 LMBDA = .1
 AUG_BATCH_SIZE = 512
 
+### ADD FILENAME ###
+FILENAME = "MNIST_blackbox"
 
 def setup_tutorial():
   """
@@ -96,7 +99,6 @@ def prep_bbox(sess, x, y, x_train, y_train, x_test, y_test,
                         args=eval_params)
   print('Test accuracy of black-box on legitimate test '
         'examples: ' + str(accuracy))
-
   return model, predictions, accuracy
 
 
@@ -219,18 +221,22 @@ def mnist_blackbox(train_start=0, train_end=60000, test_start=0,
   sess = tf.Session()
 
   # Get MNIST data
-  mnist = MNIST(train_start=train_start, train_end=train_end,
+  mnist = MNIST_67(train_start=train_start, train_end=train_end,
                 test_start=test_start, test_end=test_end)
   x_train, y_train = mnist.get_set('train')
   x_test, y_test = mnist.get_set('test')
 
   # Initialize substitute training set reserved for adversary
-  x_sub = x_test[:holdout]
-  y_sub = np.argmax(y_test[:holdout], axis=1)
+  # x_sub = x_test[:holdout]
+  # y_sub = np.argmax(y_test[:holdout], axis=1)
+  x_sub = x_train[-holdout:]
+  y_sub = np.argmax(y_train[-holdout:], axis=1)
 
   # Redefine test set as remaining samples unavailable to adversaries
-  x_test = x_test[holdout:]
-  y_test = y_test[holdout:]
+  # x_test = x_test[holdout:]
+  # y_test = y_test[holdout:]
+  x_train = x_train[:-holdout]
+  y_train = y_train[:-holdout]
 
   # Obtain Image parameters
   img_rows, img_cols, nchannels = x_train.shape[1:4]
@@ -262,7 +268,8 @@ def mnist_blackbox(train_start=0, train_end=60000, test_start=0,
 
   # Evaluate the substitute model on clean test examples
   eval_params = {'batch_size': batch_size}
-  acc = model_eval(sess, x, y, preds_sub, x_test, y_test, args=eval_params)
+  acc = model_eval(sess, x, y, preds_sub, x_test, y_test, save_logit=True, 
+                      filename=FLAGS.filename+"_clean_train_clean_eval", args=eval_params)
   accuracies['sub'] = acc
 
   # Initialize the Fast Gradient Sign Method (FGSM) attack object.
@@ -275,7 +282,8 @@ def mnist_blackbox(train_start=0, train_end=60000, test_start=0,
 
   # Evaluate the accuracy of the "black-box" model on adversarial examples
   accuracy = model_eval(sess, x, y, model.get_logits(x_adv_sub),
-                        x_test, y_test, args=eval_params)
+                        x_test, y_test, save_logit=True, 
+                      filename=FLAGS.filename+"_clean_train_adv_eval", args=eval_params)
   print('Test accuracy of oracle on adversarial examples generated '
         'using the substitute: ' + str(accuracy))
   accuracies['bbox_on_sub_adv_ex'] = accuracy
@@ -318,5 +326,9 @@ if __name__ == '__main__':
   flags.DEFINE_float('lmbda', LMBDA, 'Lambda from arxiv.org/abs/1602.02697')
   flags.DEFINE_integer('data_aug_batch_size', AUG_BATCH_SIZE,
                        'Batch size for augmentation')
+  ### ADD FLAGS ###
+  flags.DEFINE_bool('testing', True, 'Evaluate Testing data')
+  flags.DEFINE_string('filename', FILENAME,
+                       'filename prefix for save logit')
 
   tf.app.run()

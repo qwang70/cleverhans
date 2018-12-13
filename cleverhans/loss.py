@@ -161,6 +161,84 @@ class CrossEntropy(Loss):
         for coeff, logit in safe_zip(coeffs, logits))
     return loss
 
+  def getCost(self, x, y, **kwargs):
+    kwargs.update(self.kwargs)
+    if self.attack is not None:
+      attack_params = copy.copy(self.attack_params)
+      if attack_params is None:
+        attack_params = {}
+      if self.pass_y:
+        attack_params['y'] = y
+      x = x, self.attack.generate(x, **attack_params)
+      coeffs = [1. - self.adv_coeff, self.adv_coeff]
+      if self.adv_coeff == 1.:
+        x = (x[1],)
+        coeffs = (coeffs[1],)
+    else:
+      x = tuple([x])
+      coeffs = [1.]
+    assert np.allclose(sum(coeffs), 1.)
+
+    # Catching RuntimeError: Variable -= value not supported by tf.eager.
+    try:
+      y -= self.smoothing * (y - 1. / tf.cast(y.shape[-1], y.dtype))
+    except RuntimeError:
+      y.assign_sub(self.smoothing * (y - 1. / tf.cast(y.shape[-1],
+                                                      y.dtype)))
+
+    logits = [self.model.get_logits(x, **kwargs) for x in x]
+    cost = [coeff * tf.reduce_mean(softmax_cross_entropy_with_logits(labels=y,
+                                                                 logits=logit))
+        for coeff, logit in safe_zip(coeffs, logits)]
+    return cost
+
+  def getCoeff(self, x, y, **kwargs):
+    kwargs.update(self.kwargs)
+    if self.attack is not None:
+      attack_params = copy.copy(self.attack_params)
+      if attack_params is None:
+        attack_params = {}
+      if self.pass_y:
+        attack_params['y'] = y
+      x = x, self.attack.generate(x, **attack_params)
+      coeffs = [1. - self.adv_coeff, self.adv_coeff]
+      if self.adv_coeff == 1.:
+        x = (x[1],)
+        coeffs = (coeffs[1],)
+    else:
+      x = tuple([x])
+      coeffs = [1.]
+    assert np.allclose(sum(coeffs), 1.)
+
+    return coeffs
+
+  def getLogit(self, x, y, **kwargs):
+    kwargs.update(self.kwargs)
+    if self.attack is not None:
+      attack_params = copy.copy(self.attack_params)
+      if attack_params is None:
+        attack_params = {}
+      if self.pass_y:
+        attack_params['y'] = y
+      x = x, self.attack.generate(x, **attack_params)
+      coeffs = [1. - self.adv_coeff, self.adv_coeff]
+      if self.adv_coeff == 1.:
+        x = (x[1],)
+        coeffs = (coeffs[1],)
+    else:
+      x = tuple([x])
+      coeffs = [1.]
+    assert np.allclose(sum(coeffs), 1.)
+
+    # Catching RuntimeError: Variable -= value not supported by tf.eager.
+    try:
+      y -= self.smoothing * (y - 1. / tf.cast(y.shape[-1], y.dtype))
+    except RuntimeError:
+      y.assign_sub(self.smoothing * (y - 1. / tf.cast(y.shape[-1],
+                                                      y.dtype)))
+
+    logits = [self.model.get_logits(x, **kwargs) for x in x]
+    return logits
 
 class MixUp(Loss):
   """Mixup ( https://arxiv.org/abs/1710.09412 )

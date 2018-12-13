@@ -97,6 +97,60 @@ class MNIST(Dataset):
     return (self.in_memory_dataset(self.x_train, self.y_train, shuffle),
             self.in_memory_dataset(self.x_test, self.y_test, repeat=False))
 
+class MNIST_67(Dataset):
+  """The MNIST dataset"""
+
+  NB_CLASSES = 10
+
+  def __init__(self, train_start=0, train_end=60000, test_start=0,
+               test_end=10000, center=False, max_val=1.):
+    super(MNIST_67, self).__init__(locals())
+    x_train, y_train, x_test, y_test = data_mnist(train_start=train_start,
+                                                  train_end=train_end,
+                                                  test_start=test_start,
+                                                  test_end=test_end)
+
+    if center:
+      x_train = x_train * 2. - 1.
+      x_test = x_test * 2. - 1.
+    x_train *= max_val
+    x_test *= max_val
+
+    x_train_binary = []
+    y_train_binary = []
+    for i in range(y_train.shape[0]):
+      if np.where(y_train[i] == 1)[0][0] == 6:
+        x_train_binary.append(x_train[i])
+        y_train_binary.append([1,0])
+      elif np.where(y_train[i] == 1)[0][0] == 7:
+        x_train_binary.append(x_train[i])
+        y_train_binary.append([0,1])
+
+    x_test_binary = []
+    y_test_binary = []
+    for i in range(y_test.shape[0]):
+      if np.where(y_test[i] == 1)[0][0] == 6:
+        x_test_binary.append(x_test[i])
+        y_test_binary.append([1,0])
+      elif np.where(y_test[i] == 1)[0][0] == 7:
+        x_test_binary.append(x_test[i])
+        y_test_binary.append([0,1])
+    
+    x_train_binary = np.array(x_train_binary)
+    y_train_binary = np.array(y_train_binary)
+    x_test_binary = np.array(x_test_binary)
+    y_test_binary = np.array(y_test_binary)
+
+    self.x_train = x_train_binary.astype('float32')
+    self.y_train = y_train_binary.astype('float32')
+    self.x_test = x_test_binary.astype('float32')
+    self.y_test = y_test_binary.astype('float32')
+
+  def to_tensorflow(self, shuffle=4096):
+    return (self.in_memory_dataset(self.x_train, self.y_train, shuffle),
+            self.in_memory_dataset(self.x_test, self.y_test, repeat=False))
+
+
 
 class CIFAR10(Dataset):
   """The CIFAR-10 dataset"""
@@ -158,7 +212,7 @@ def maybe_download_file(url, datadir=None, force=False):
     datadir = tempfile.gettempdir()
   file_name = url[url.rfind("/")+1:]
   dest_file = os.path.join(datadir, file_name)
-
+  
   isfile = os.path.isfile(dest_file)
 
   if force or not isfile:

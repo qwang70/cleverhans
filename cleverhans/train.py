@@ -148,6 +148,9 @@ def train(sess, loss, x_train, y_train,
       preprocessed_xs.append(x)
 
       loss_value = loss.fprop(x, y, **fprop_args)
+      # cost_value = loss.getCost(x, y, **fprop_args)
+      # coeff_value = loss.getCoeff(x, y, **fprop_args)
+      # logit_value = loss.getLogit(x, y, **fprop_args)
 
       grads.append(optimizer.compute_gradients(
           loss_value, var_list=var_list))
@@ -243,6 +246,8 @@ def train(sess, loss, x_train, y_train,
       if feed is not None:
         feed_dict.update(feed)
 
+      # _, loss_numpy, cost_numpy, logit_numpy = sess.run(
+      #     [train_step, loss_value, cost_value, logit_value], feed_dict=feed_dict)
       _, loss_numpy = sess.run(
           [train_step, loss_value], feed_dict=feed_dict)
 

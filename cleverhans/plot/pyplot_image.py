@@ -5,6 +5,7 @@ images in 3rd party viewers, etc.
 """
 import numpy as np
 from six.moves import range
+from random import *
 
 def pair_visual(original, adversarial, figure=None):
   """
@@ -46,6 +47,7 @@ def pair_visual(original, adversarial, figure=None):
 
   # Draw the plot and return
   plt.show()
+  plt.savefig("Cleverhans_Pair_Visualization_"+str(randint(1, 10)))
   return figure
 
 def grid_visual(data):

@@ -16,7 +16,8 @@ import tensorflow as tf
 from tensorflow.python.platform import flags
 
 from cleverhans.attacks import SaliencyMapMethod
-from cleverhans.dataset import MNIST
+### IMPORT BINARY MNIST ###
+from cleverhans.dataset import MNIST, MNIST_67
 from cleverhans.loss import CrossEntropy
 from cleverhans.utils import other_classes, set_log_level
 from cleverhans.utils import pair_visual, grid_visual, AccuracyReport
@@ -32,6 +33,8 @@ BATCH_SIZE = 128
 LEARNING_RATE = .001
 SOURCE_SAMPLES = 10
 
+### ADD FILENAME ###
+FILENAME = "MNIST_JSMA"
 
 def mnist_tutorial_jsma(train_start=0, train_end=60000, test_start=0,
                         test_end=10000, viz_enabled=VIZ_ENABLED,
@@ -64,8 +67,9 @@ def mnist_tutorial_jsma(train_start=0, train_end=60000, test_start=0,
 
   set_log_level(logging.DEBUG)
 
+  ### CHANGE DATASET ###  
   # Get MNIST test data
-  mnist = MNIST(train_start=train_start, train_end=train_end,
+  mnist = MNIST_67(train_start=train_start, train_end=train_end,
                 test_start=test_start, test_end=test_end)
   x_train, y_train = mnist.get_set('train')
   x_test, y_test = mnist.get_set('test')
@@ -102,8 +106,10 @@ def mnist_tutorial_jsma(train_start=0, train_end=60000, test_start=0,
 
   # Evaluate the accuracy of the MNIST model on legitimate test examples
   eval_params = {'batch_size': batch_size}
-  accuracy = model_eval(sess, x, y, preds, x_test, y_test, args=eval_params)
-  assert x_test.shape[0] == test_end - test_start, x_test.shape
+
+  ### TEST ON TRAIN DATA ###
+  accuracy = model_eval(sess, x, y, preds, x_test, y_test, save_logit=False, args=eval_params)
+  # assert x_test.shape[0] == test_end - test_start, x_test.shape
   print('Test accuracy on legitimate test examples: {0}'.format(accuracy))
   report.clean_train_clean_eval = accuracy
 
@@ -228,5 +234,8 @@ if __name__ == '__main__':
                        'Nb of test inputs to attack')
   flags.DEFINE_float('learning_rate', LEARNING_RATE,
                      'Learning rate for training')
+  ### ADD FLAGS ###
+  flags.DEFINE_string('filename', FILENAME,
+                       'filename prefix for save logit')
 
   tf.app.run()

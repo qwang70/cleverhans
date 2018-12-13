@@ -15,9 +15,11 @@ import logging
 import numpy as np
 import tensorflow as tf
 from tensorflow.python.platform import flags
+from ../../generate_data import get_MNIST_67_preprocess
 
 from cleverhans.loss import CrossEntropy
-from cleverhans.dataset import MNIST
+### IMPORT BINARY MNIST ###
+from cleverhans.dataset import MNIST, MNIST_67
 from cleverhans.utils_tf import model_eval
 from cleverhans.train import train
 from cleverhans.attacks import FastGradientMethod
@@ -32,6 +34,8 @@ LEARNING_RATE = 0.001
 CLEAN_TRAIN = True
 BACKPROP_THROUGH_ATTACK = False
 NB_FILTERS = 64
+### ADD FILENAME ###
+FILENAME = "MNIST_FGSM"
 
 
 def mnist_tutorial(train_start=0, train_end=60000, test_start=0,
@@ -78,11 +82,12 @@ def mnist_tutorial(train_start=0, train_end=60000, test_start=0,
     config_args = {}
   sess = tf.Session(config=tf.ConfigProto(**config_args))
 
+  ### CHANGE DATASET ###
   # Get MNIST data
-  mnist = MNIST(train_start=train_start, train_end=train_end,
-                test_start=test_start, test_end=test_end)
-  x_train, y_train = mnist.get_set('train')
-  x_test, y_test = mnist.get_set('test')
+  # mnist = MNIST_67(train_start=train_start, train_end=train_end,
+  #               test_start=test_start, test_end=test_end)
+  # x_train, y_train = mnist.get_set('train')
+  # x_test, y_test = mnist.get_set('test')
 
   # Use Image Parameters
   img_rows, img_cols, nchannels = x_train.shape[1:4]
@@ -106,9 +111,11 @@ def mnist_tutorial(train_start=0, train_end=60000, test_start=0,
       'clip_max': 1.
   }
   rng = np.random.RandomState([2017, 8, 30])
-
+  
+  ### ADD PARAMETERS ###  
   def do_eval(preds, x_set, y_set, report_key, is_adv=None):
-    acc = model_eval(sess, x, y, preds, x_set, y_set, args=eval_params)
+    acc = model_eval(sess, x, y, preds, x_set, y_set, save_logit=True, 
+                      filename=FLAGS.filename+"_"+report_key, args=eval_params)
     setattr(report, report_key, acc)
     if is_adv is None:
       report_text = None
@@ -196,7 +203,8 @@ def main(argv=None):
                  learning_rate=FLAGS.learning_rate,
                  clean_train=FLAGS.clean_train,
                  backprop_through_attack=FLAGS.backprop_through_attack,
-                 nb_filters=FLAGS.nb_filters)
+                 nb_filters=FLAGS.nb_filters,
+                 testing=FLAGS.testing)
 
 
 if __name__ == '__main__':
@@ -212,5 +220,9 @@ if __name__ == '__main__':
   flags.DEFINE_bool('backprop_through_attack', BACKPROP_THROUGH_ATTACK,
                     ('If True, backprop through adversarial example '
                      'construction process during adversarial training'))
+  ### ADD FLAGS ###
+  flags.DEFINE_bool('testing', True, 'Evaluate Testing data')
+  flags.DEFINE_string('filename', FILENAME,
+                       'filename prefix for save logit')
 
   tf.app.run()

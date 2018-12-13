@@ -8,6 +8,7 @@ import math
 import os
 import time
 import warnings
+import pickle
 
 import numpy as np
 import six
@@ -108,6 +109,7 @@ def train(sess, loss, x, y, X_train, Y_train, save=False,
   :param optimizer: Optimizer to be used for training
   :return: True if model trained
   """
+  print("train")
   warnings.warn("This function is deprecated and will be removed on or after"
                 " 2019-04-05. Switch to cleverhans.train.train.")
 
@@ -172,7 +174,9 @@ def train(sess, loss, x, y, X_train, Y_train, save=False,
                      y: Y_train[index_shuf[start:end]]}
         if feed is not None:
           feed_dict.update(feed)
-        train_step.run(feed_dict=feed_dict)
+        tvars_vals = train_step.run(feed_dict=feed_dict)
+        print("train")
+        print(tvars_vals)
       assert end >= len(X_train)  # Check that all examples were used
       cur = time.time()
       _logger.info("Epoch " + str(epoch) + " took " +
@@ -193,7 +197,7 @@ def train(sess, loss, x, y, X_train, Y_train, save=False,
 
 
 def model_eval(sess, x, y, predictions, X_test=None, Y_test=None,
-               feed=None, args=None):
+               feed=None, filename=None, save_logit=False, args=None):
   """
   Compute the accuracy of a TF model on some data
   :param sess: TF session to use
@@ -211,6 +215,8 @@ def model_eval(sess, x, y, predictions, X_test=None, Y_test=None,
   """
   global _model_eval_cache
   args = _ArgsWrapper(args or {})
+  logit_arr = None
+  print(filename)
 
   assert args.batch_size, "Batch size was not given in args dict"
   if X_test is None or Y_test is None:
@@ -253,10 +259,17 @@ def model_eval(sess, x, y, predictions, X_test=None, Y_test=None,
       cur_batch_size = end - start
       X_cur[:cur_batch_size] = X_test[start:end]
       Y_cur[:cur_batch_size] = Y_test[start:end]
+
       feed_dict = {x: X_cur, y: Y_cur}
       if feed is not None:
         feed_dict.update(feed)
       cur_corr_preds = correct_preds.eval(feed_dict=feed_dict)
+      if save_logit:
+        prediction_arr = predictions.eval(feed_dict={x: X_cur})
+        if logit_arr is None:
+          logit_arr = prediction_arr
+        else:
+          logit_arr = np.vstack((logit_arr, prediction_arr))
 
       accuracy += cur_corr_preds[:cur_batch_size].sum()
 
@@ -264,6 +277,12 @@ def model_eval(sess, x, y, predictions, X_test=None, Y_test=None,
 
     # Divide by number of examples to get final value
     accuracy /= len(X_test)
+  if save_logit:
+    assert len(logit_arr) >= len(X_test) 
+    logit_arr = logit_arr[:len(X_test)]
+    assert len(logit_arr) == len(X_test) 
+    with open('../../pickle/{}.pickle'.format(filename), 'wb') as handle:
+      pickle.dump(logit_arr, handle)
 
   return accuracy
 
@@ -453,6 +472,11 @@ def model_train(sess, x, y, predictions, X_train, Y_train, save=False,
       warnings.warn("Update your copy of tensorflow; future versions of "
                     "CleverHans may drop support for this version.")
       sess.run(tf.initialize_all_variables())
+      # tvars_vals = tf.initialize_all_variables()
+      # tvars_vals = sess.run(tvars_vals)
+      # for var, val in zip(tvars, tvars_vals):
+      #     print("var: {}, value: {}".format(var.name, val)) #...or sort it in a list....
+
 
     for epoch in xrange(args.nb_epochs):
       # Compute number of batches
@@ -475,7 +499,9 @@ def model_train(sess, x, y, predictions, X_train, Y_train, save=False,
                      y: Y_train[index_shuf[start:end]]}
         if feed is not None:
           feed_dict.update(feed)
-        train_step.run(feed_dict=feed_dict)
+        tvars_vals = train_step.run(feed_dict=feed_dict)
+        print("model_train")
+        print(tvars_vals)
       assert end >= len(X_train)  # Check that all examples were used
       cur = time.time()
       _logger.info("Epoch " + str(epoch) + " took " +
