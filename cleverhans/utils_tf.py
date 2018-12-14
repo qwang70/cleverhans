@@ -266,12 +266,14 @@ def model_eval(sess, x, y, predictions, X_test=None, Y_test=None,
       if feed is not None:
         feed_dict.update(feed)
       cur_corr_preds = correct_preds.eval(feed_dict=feed_dict)
-      if save_logit:
-        prediction_arr = predictions.eval(feed_dict={x: X_cur})
-        if logit_arr is None:
-          logit_arr = prediction_arr
-        else:
-          logit_arr = np.vstack((logit_arr, prediction_arr))
+      prediction_arr = predictions.eval(feed_dict={x: X_cur})
+
+      # create logit arr
+      if logit_arr is None:
+        logit_arr = prediction_arr
+      else:
+        logit_arr = np.vstack((logit_arr, prediction_arr))
+
       accuracy += cur_corr_preds[:cur_batch_size].sum()
 
     assert end >= len(X_test)
@@ -281,6 +283,10 @@ def model_eval(sess, x, y, predictions, X_test=None, Y_test=None,
 
     # calculate metric
     true_labels = np.argmax(Y_test, axis=1)
+    print("len(Y_test)", len(Y_test))
+    print("logit_arr", logit_arr.shape)
+    print("logit_arr[:len(Y_test)]", logit_arr[:len(Y_test)])
+    print("np.argmax(logit_arr[:len(Y_test)], axis=1)",np.argmax(logit_arr[:len(Y_test)], axis=1))
     pred_labels = np.argmax(logit_arr[:len(Y_test)], axis=1)
     # True Positive (TP): we predict a label of 1 (positive), and the true label is 1.
     TP = np.sum(np.logical_and(pred_labels == 1, true_labels == 1))
