@@ -10,9 +10,13 @@ Project: https://github.com/aymericdamien/TensorFlow-Examples/
 from __future__ import print_function
 
 # Import MNIST data
-from project_utils import load_features
+from project_utils import load_features, load_test_features
 import tensorflow as tf
+import numpy as np
 
+preprocesses = ["None", "gaussian", "sqeeze"]
+attacks = ["None", "spatial_grid", "fgsm", "gsma", "spatial_grid"]
+   
 x_train, y_train = load_features()
 
 # Parameters
@@ -65,31 +69,119 @@ train_op = optimizer.minimize(loss_op)
 # Initializing the variables
 init = tf.global_variables_initializer()
 
-with tf.Session() as sess:
-    sess.run(init)
 
-    # Training cycle
-    for epoch in range(training_epochs):
-        avg_cost = 0.
-        total_batch = int(len(y_train)/batch_size)
-        # Loop over all batches
-        for i in range(total_batch):
-            # batch_x, batch_y = mnist.train.next_batch(batch_size)
-            batch_x = x_train[i*batch_size:min((i+1)*batch_size,len(y_train))]
-            batch_y = y_train[i*batch_size:min((i+1)*batch_size,len(y_train))]
-            # Run optimization op (backprop) and cost op (to get loss value)
-            _, c = sess.run([train_op, loss_op], feed_dict={X: batch_x,
-                                                            Y: batch_y})
-            # Compute average loss
-            avg_cost += c / total_batch
-        # Display logs per epoch step
-        if epoch % display_step == 0:
-            print("Epoch:", '%04d' % (epoch+1), "cost={:.9f}".format(avg_cost))
-    print("Optimization Finished!")
+def train():
+    # Add ops to save and restore all the variables.
+    saver = tf.train.Saver()
+    with tf.Session() as sess:
+        sess.run(init)
 
-    # Test model
-    pred = tf.nn.softmax(logits)  # Apply softmax to logits
-    correct_prediction = tf.equal(tf.argmax(pred, 1), tf.argmax(Y, 1))
-    # Calculate accuracy
-    accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
-    print("Accuracy:", accuracy.eval({X: x_train, Y: y_train}))
+        # Training cycle
+        for epoch in range(training_epochs):
+            avg_cost = 0.
+            total_batch = int(len(y_train)/batch_size)
+            # Loop over all batches
+            for i in range(total_batch):
+                # batch_x, batch_y = mnist.train.next_batch(batch_size)
+                batch_x = x_train[i*batch_size:min((i+1)*batch_size,len(y_train))]
+                batch_y = y_train[i*batch_size:min((i+1)*batch_size,len(y_train))]
+                # Run optimization op (backprop) and cost op (to get loss value)
+                _, c = sess.run([train_op, loss_op], feed_dict={X: batch_x,
+                                                                Y: batch_y})
+                # Compute average loss
+                avg_cost += c / total_batch
+            # Display logs per epoch step
+            if epoch % display_step == 0:
+                print("Epoch:", '%04d' % (epoch+1), "cost={:.9f}".format(avg_cost))
+        print("Optimization Finished!")
+        for preprocess in preprocesses:
+            for attack in attacks:
+                print(preprocess, attack)
+                feature, y_label = load_test_features(preprocess, attack)
+                # Test model
+                pred = tf.nn.softmax(logits)  # Apply softmax to logits
+                # run
+                prediction = pred.eval({X: feature, Y: y_label})     
+                # calculate metric
+                true_labels = np.argmax(y_label, axis=1)
+                pred_labels = np.argmax(prediction[:len(y_label)], axis=1)
+                # True Positive (TP): we predict a label of 1 (positive), and the true label is 1.
+                TP = np.sum(np.logical_and(pred_labels == 1, true_labels == 1))
+                
+                # True Negative (TN): we predict a label of 0 (negative), and the true label is 0.
+                TN = np.sum(np.logical_and(pred_labels == 0, true_labels == 0))
+                
+                # False Positive (FP): we predict a label of 1 (positive), but the true label is 0.
+                FP = np.sum(np.logical_and(pred_labels == 1, true_labels == 0))
+                
+                # False Negative (FN): we predict a label of 0 (negative), but the true label is 1.
+                FN = np.sum(np.logical_and(pred_labels == 0, true_labels == 1))
+
+                recall = TP/float(TP+FN)
+                precision = TP/float(TP+FP)
+                f1 = 2.*TP/(2.*TP + FP + FN)  
+
+                correct_prediction = tf.equal(tf.argmax(pred, 1), tf.argmax(Y, 1))
+                # Calculate accuracy
+                accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
+                print("Accuracy:", accuracy.eval({X: x_train, Y: y_train}))
+                print(preprocess, attack, "accuracy", accuracy)
+                print(preprocess, attack, "precision", precision)
+                print(preprocess, attack, "recall", recall)
+                print(preprocess, attack, "f1", f1)
+
+        # Save the variables to disk.
+        # save_path = saver.save(sess, "../models/mighty.ckpt")
+
+def evaluate():
+    preprocesses = ["None", "gaussian", "sqeeze"]
+    attacks = ["None", "spatial_grid", "fgsm", "gsma", "spsa"]
+    # Add ops to save and restore all the variables.
+    saver = tf.train.Saver(max_to_keep=5, keep_checkpoint_every_n_hours=1)
+
+    # Later, launch the model, use the saver to restore variables from disk, and
+    # do some work with the model.
+    with tf.Session() as sess:
+        # Restore variables from disk.
+        saver.restore(sess, tf.train.latest_checkpoint('../models/'))
+        for preprocess in preprocesses:
+            for attack in attacks:
+                print(preprocess, attack)
+                feature, y_label = load_test_features(preprocess, attack)
+                logits = sess.run('Softmax', 
+                     feed_dict={X: feature, Y: y_label})
+                print(logits)
+                
+                # Test model
+                pred = tf.nn.softmax(logits)  # Apply softmax to logits
+                # run
+                prediction = pred.eval({X: feature, Y: y_label})     
+                # calculate metric
+                true_labels = np.argmax(y_label, axis=1)
+                pred_labels = np.argmax(prediction[:len(y_label)], axis=1)
+                # True Positive (TP): we predict a label of 1 (positive), and the true label is 1.
+                TP = np.sum(np.logical_and(pred_labels == 1, true_labels == 1))
+                
+                # True Negative (TN): we predict a label of 0 (negative), and the true label is 0.
+                TN = np.sum(np.logical_and(pred_labels == 0, true_labels == 0))
+                
+                # False Positive (FP): we predict a label of 1 (positive), but the true label is 0.
+                FP = np.sum(np.logical_and(pred_labels == 1, true_labels == 0))
+                
+                # False Negative (FN): we predict a label of 0 (negative), but the true label is 1.
+                FN = np.sum(np.logical_and(pred_labels == 0, true_labels == 1))
+
+                recall = TP/float(TP+FN)
+                precision = TP/float(TP+FP)
+                f1 = 2.*TP/(2.*TP + FP + FN)  
+                print(preprocess, attack, "accuracy", accuracy)
+                print(preprocess, attack, "precision", precision)
+                print(preprocess, attack, "recall", recall)
+                print(preprocess, attack, "f1", f1)
+
+                correct_prediction = tf.equal(tf.argmax(pred, 1), tf.argmax(Y, 1))
+                # Calculate accuracy
+                accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
+                print("Accuracy:", accuracy.eval({X: feature, Y: y_label}))
+train()
+#evaluate()

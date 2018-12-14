@@ -8,13 +8,13 @@ from  scipy import ndimage
 from cleverhans.utils import set_log_level
 from cleverhans.utils_tf import model_eval, silence
 from cleverhans.serial import load
-from cleverhans.attacks import FastGradientMethod, SaliencyMapMethod
+from cleverhans.attacks import FastGradientMethod, SaliencyMapMethod, SPSA
 
 model_paths = ["../models/MNIST_FGSM_.joblib", "../models/MNIST_FGSM_gaussian.joblib", 
                 "../models/MNIST_FGSM_sqeeze.joblib",
                 "../models/MNIST_blackbox_.joblib", "../models/MNIST_blackbox_gaussian.joblib", 
                 "../models/MNIST_blackbox_sqeeze.joblib"] 
-attacks = [None, "spatial_grid", "fgsm", "gsma"]
+attacks = [None, "spatial_grid", "fgsm", "gsma", "spsa"]
 preprocesses = [None, "gaussian", "sqeeze"] 
 def test_data_sampling(x_path, y_path, size=2000):
     with open(x_path, "rb") as f:
@@ -121,43 +121,66 @@ def evaluate_model(filepath, attack=None, preprocess=None,
         jsma_params['y_target'] = one_hot_target
         adv_x = jsma.generate_np(sample, **jsma_params)
         x_test[sample_ind:(sample_ind + 1)] = adv_x
-    print(adv_x.shape)
   
   # Image Process
   x_test = image_process(x_test, preprocess)
 
   preds = model.get_logits(x)
-  do_eval(preds, x_test, y_test, str(filepath[10:-7])+"_"+str(preprocess)+"_"+str(attack), True)
+  fn = str(filepath[10:-7])+"_"+str(preprocess)+"_"+str(attack)
+  do_eval(preds, x_test, y_test, fn, True)
+  with open('{}_y.pickle'.format(fn), 'wb') as handle:
+      pickle.dump(y_test, handle)
 
-def load_features(train=True):
+def load_test_features(preprocess, attack):
     feature = None
     y_label = None
-    if train:
-        # fgsm features
-        with open("../pickle/MNIST_FGSM_train_adv_train_adv_eval_gaussian.pickle", "rb") as f:
-            feature = pickle.load(f)
-        with open("../pickle/MNIST_FGSM_train_adv_train_adv_eval_sqeeze.pickle", "rb") as f:
-            feature = np.vstack((feature, pickle.load(f)))
-        with open("../pickle/MNIST_FGSM_train_adv_train_adv_eval_.pickle", "rb") as f:
-            feature = np.vstack((feature, pickle.load(f)))
-        with open("../pickle/MNIST_FGSM_y_train.pickle", "rb") as f:
-            label = pickle.load(f)
-            y_label = label
-            y_label = np.vstack((y_label, label))
-            y_label = np.vstack((y_label, label))
-
-        # black box features
-        with open("../pickle/MNIST_blackbox_train_adv_eval_.pickle", "rb") as f:
-            feature = np.vstack((feature, pickle.load(f)))
-        with open("../pickle/MNIST_blackbox_train_adv_eval_gaussian.pickle", "rb") as f:
-            feature = np.vstack((feature, pickle.load(f)))
-        with open("../pickle/MNIST_blackbox_train_adv_eval_sqeeze.pickle", "rb") as f:
-            feature = np.vstack((feature, pickle.load(f)))
-        with open("../pickle/MNIST_blackbox_y_train.pickle", "rb") as f:
-            y_label = np.vstack((y_label, label))
-            y_label = np.vstack((y_label, label))
-            y_label = np.vstack((y_label, label))
+    model_names = ["MNIST_FGSM_","MNIST_FGSM_gaussian","MNIST_FGSM_sqeeze", 
+                "MNIST_blackbox_","MNIST_blackbox_gaussian","MNIST_blackbox_sqeeze" ]
+    for model_name in model_names:
+        filename = '../pickle/{}_{}_{}_.pickle'.format(
+            model_name, preprocess, attack)
+        with open(filename, "rb") as f:
+            logits = pickle.load(f)
+        if feature is None:
+            feature = logits
+        else:
+            feature = np.hstack((feature, logits))
+    if attack != 'spatial_grid':
+        with open("../pickle/MNIST_FGSM_y_test.pickle", "rb") as f:
+            y_label = pickle.load(f)
+    else:
+        with open("../pickle/attacked_spatial_grid_y.pickle", "rb") as f:
+            y_label = pickle.load(f)
     return feature, y_label
+            
+
+
+
+def load_features():
+    # fgsm features
+    with open("../pickle/MNIST_FGSM_train_adv_train_adv_eval_.pickle", "rb") as f:
+        fgsm_feature = pickle.load(f)
+    with open("../pickle/MNIST_FGSM_train_adv_train_adv_eval_gaussian.pickle", "rb") as f:
+        fgsm_feature = np.hstack((fgsm_feature, pickle.load(f)))
+    with open("../pickle/MNIST_FGSM_train_adv_train_adv_eval_sqeeze.pickle", "rb") as f:
+        fgsm_feature = np.hstack((fgsm_feature, pickle.load(f)))
+    with open("../pickle/MNIST_FGSM_y_train.pickle", "rb") as f:
+        fgsm_label = pickle.load(f)
+
+    with open("../pickle/MNIST_blackbox_y_train.pickle", "rb") as f:
+        blackbox_label = pickle.load(f)
+
+    # black box features
+    with open("../pickle/MNIST_blackbox_train_adv_eval_.pickle", "rb") as f:
+        blackbox_feature = pickle.load(f)
+    with open("../pickle/MNIST_blackbox_train_adv_eval_gaussian.pickle", "rb") as f:
+        blackbox_feature = np.hstack((blackbox_feature, pickle.load(f)))
+    with open("../pickle/MNIST_blackbox_train_adv_eval_sqeeze.pickle", "rb") as f:
+        blackbox_feature = np.hstack((blackbox_feature, pickle.load(f)))
+
+    size = min(len(blackbox_label), len(fgsm_label))
+    feature = np.hstack((fgsm_feature[:size], blackbox_feature[:size]))
+    return feature, blackbox_label
 
 def image_process(x, preprocess=None):
     if preprocess == "gaussian":
@@ -200,4 +223,4 @@ def test_all_models():
                 evaluate_model(model_path, attack=att, preprocess=p)
 
 
-test_all_models()
+#test_all_models()
