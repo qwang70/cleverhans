@@ -200,4 +200,4 @@ def test_all_models():
                 evaluate_model(model_path, attack=att, preprocess=p)
 
 
-#test_all_models()
+test_all_models()

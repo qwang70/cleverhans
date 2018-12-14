@@ -1,0 +1,273 @@
+Preparing the black-box model.
+Defined TensorFlow model graph.
+num_devices:  1
+None
+len(Y_test) 1986
+logit_arr (2048, 2)
+logit_arr[:len(Y_test)] [[-1.9045684   1.0961777 ]
+ [ 0.9613922  -2.048564  ]
+ [-1.9347389   1.116979  ]
+ ...
+ [ 0.85779154 -2.1576226 ]
+ [-1.8949494   1.1002791 ]
+ [ 0.860351   -2.0763469 ]]
+np.argmax(logit_arr[:len(Y_test)], axis=1) [1 0 1 ... 0 1 0]
+None accuracy 0.999496475327291
+None precision 0.9990281827016521
+None recall 1.0
+None f1 0.9995138551288284
+Test accuracy of black-box on legitimate test examples: 0.999496475327291
+Training the substitute model.
+Defined TensorFlow model graph for the substitute.
+Substitute training epoch #0
+num_devices:  1
+Augmenting substitute training data.
+Labeling substitute training data.
+Substitute training epoch #1
+num_devices:  1
+Augmenting substitute training data.
+Labeling substitute training data.
+Substitute training epoch #2
+num_devices:  1
+Augmenting substitute training data.
+Labeling substitute training data.
+Substitute training epoch #3
+num_devices:  1
+Augmenting substitute training data.
+Labeling substitute training data.
+Substitute training epoch #4
+num_devices:  1
+Augmenting substitute training data.
+Labeling substitute training data.
+Substitute training epoch #5
+num_devices:  1
+save model
+MNIST_blackbox_test_clean_eval
+len(Y_test) 1986
+logit_arr (2048, 2)
+logit_arr[:len(Y_test)] [[-21.290272   23.147621 ]
+ [  5.5811787  -6.4978037]
+ [-20.113651   21.908695 ]
+ ...
+ [ 20.875328  -23.46983  ]
+ [-22.75904    24.430264 ]
+ [ 19.182283  -21.740042 ]]
+np.argmax(logit_arr[:len(Y_test)], axis=1) [1 0 1 ... 0 1 0]
+MNIST_blackbox_test_clean_eval accuracy 0.9899295065458208
+MNIST_blackbox_test_clean_eval precision 0.9950884086444007
+MNIST_blackbox_test_clean_eval recall 0.9854085603112841
+MNIST_blackbox_test_clean_eval f1 0.9902248289345064
+MNIST_blackbox_test_adv_eval
+len(Y_test) 1986
+logit_arr (2048, 2)
+logit_arr[:len(Y_test)] [[-0.23957463  0.03659887]
+ [-0.10788827 -0.3132034 ]
+ [-0.39473286  0.13484901]
+ ...
+ [ 0.13894404 -0.5114512 ]
+ [-0.44352874  0.16028307]
+ [ 0.32945526 -0.76919574]]
+np.argmax(logit_arr[:len(Y_test)], axis=1) [1 0 1 ... 0 1 0]
+MNIST_blackbox_test_adv_eval accuracy 0.7668680765357503
+MNIST_blackbox_test_adv_eval precision 0.8014941302027748
+MNIST_blackbox_test_adv_eval recall 0.730544747081712
+MNIST_blackbox_test_adv_eval f1 0.7643765903307888
+Test accuracy of oracle on adversarial examples generated using the substitute: 0.7668680765357503
+MNIST_blackbox_train_adv_eval
+len(Y_test) 12033
+logit_arr (12160, 2)
+logit_arr[:len(Y_test)] [[-0.06876434 -0.4117914 ]
+ [-0.3190914  -0.06342805]
+ [-0.23054957 -0.14249372]
+ ...
+ [-0.02967584 -0.23791057]
+ [-0.2962593  -0.06307974]
+ [-0.06826783 -0.21937867]]
+np.argmax(logit_arr[:len(Y_test)], axis=1) [0 1 1 ... 0 1 0]
+MNIST_blackbox_train_adv_eval accuracy 0.7310728829053437
+MNIST_blackbox_train_adv_eval precision 0.7591228070175439
+MNIST_blackbox_train_adv_eval recall 0.6990306946688207
+MNIST_blackbox_train_adv_eval f1 0.727838519764508
+Train accuracy of oracle on adversarial examples generated using the substitute: 0.7310728829053437
+Preparing the black-box model.
+Defined TensorFlow model graph.
+num_devices:  1
+None
+len(Y_test) 1986
+logit_arr (2048, 2)
+logit_arr[:len(Y_test)] [[-1.7581196   1.1953334 ]
+ [ 0.69681686 -1.8935894 ]
+ [-1.8496801   1.2761444 ]
+ ...
+ [ 0.531773   -2.4158342 ]
+ [-1.7645882   1.2895082 ]
+ [ 0.47925308 -2.365741  ]]
+np.argmax(logit_arr[:len(Y_test)], axis=1) [1 0 1 ... 0 1 0]
+None accuracy 0.999496475327291
+None precision 0.9990281827016521
+None recall 1.0
+None f1 0.9995138551288284
+Test accuracy of black-box on legitimate test examples: 0.999496475327291
+Training the substitute model.
+Defined TensorFlow model graph for the substitute.
+Substitute training epoch #0
+num_devices:  1
+Augmenting substitute training data.
+Labeling substitute training data.
+Substitute training epoch #1
+num_devices:  1
+Augmenting substitute training data.
+Labeling substitute training data.
+Substitute training epoch #2
+num_devices:  1
+Augmenting substitute training data.
+Labeling substitute training data.
+Substitute training epoch #3
+num_devices:  1
+Augmenting substitute training data.
+Labeling substitute training data.
+Substitute training epoch #4
+num_devices:  1
+Augmenting substitute training data.
+Labeling substitute training data.
+Substitute training epoch #5
+num_devices:  1
+save model
+MNIST_blackbox_test_clean_eval
+len(Y_test) 1986
+logit_arr (2048, 2)
+logit_arr[:len(Y_test)] [[-13.3469515  15.132983 ]
+ [  6.652811   -7.263089 ]
+ [-14.615368   16.588589 ]
+ ...
+ [ 17.594189  -19.29693  ]
+ [-15.377599   17.374794 ]
+ [ 19.292007  -21.047462 ]]
+np.argmax(logit_arr[:len(Y_test)], axis=1) [1 0 1 ... 0 1 0]
+MNIST_blackbox_test_clean_eval accuracy 0.9813695871097684
+MNIST_blackbox_test_clean_eval precision 0.9920556107249255
+MNIST_blackbox_test_clean_eval recall 0.9717898832684825
+MNIST_blackbox_test_clean_eval f1 0.9818181818181818
+MNIST_blackbox_test_adv_eval
+len(Y_test) 1986
+logit_arr (2048, 2)
+logit_arr[:len(Y_test)] [[ 3.691228  -6.475661 ]
+ [-5.391034   3.0749922]
+ [ 2.9929333 -5.61254  ]
+ ...
+ [-3.6707568  1.8538893]
+ [ 1.8347017 -3.8106554]
+ [-3.7520068  1.991157 ]]
+np.argmax(logit_arr[:len(Y_test)], axis=1) [0 1 0 ... 1 0 1]
+MNIST_blackbox_test_adv_eval accuracy 0.01863041289023162
+MNIST_blackbox_test_adv_eval precision 0.0296220633299285
+MNIST_blackbox_test_adv_eval recall 0.02821011673151751
+MNIST_blackbox_test_adv_eval f1 0.028898854010961636
+Test accuracy of oracle on adversarial examples generated using the substitute: 0.01863041289023162
+MNIST_blackbox_train_adv_eval
+len(Y_test) 12033
+logit_arr (12160, 2)
+logit_arr[:len(Y_test)] [[-6.6595387  3.447842 ]
+ [ 2.6573725 -5.264374 ]
+ [-8.524269   4.2860637]
+ ...
+ [-4.536669   2.244865 ]
+ [ 3.1438012 -5.8372016]
+ [-5.0007534  2.6886673]]
+np.argmax(logit_arr[:len(Y_test)], axis=1) [1 0 1 ... 1 0 1]
+MNIST_blackbox_train_adv_eval accuracy 0.009141527466134796
+MNIST_blackbox_train_adv_eval precision 0.013245033112582781
+MNIST_blackbox_train_adv_eval recall 0.012600969305331179
+MNIST_blackbox_train_adv_eval f1 0.012914976405331567
+Train accuracy of oracle on adversarial examples generated using the substitute: 0.009141527466134796
+Preparing the black-box model.
+Defined TensorFlow model graph.
+num_devices:  1
+None
+len(Y_test) 1986
+logit_arr (2048, 2)
+logit_arr[:len(Y_test)] [[-1.9037027   0.9073306 ]
+ [ 0.6726647  -2.254581  ]
+ [-1.8857694   0.9798207 ]
+ ...
+ [ 0.56801987 -2.3312612 ]
+ [-1.8654354   1.0141593 ]
+ [ 0.54734737 -2.40018   ]]
+np.argmax(logit_arr[:len(Y_test)], axis=1) [1 0 1 ... 0 1 0]
+None accuracy 0.999496475327291
+None precision 0.9990281827016521
+None recall 1.0
+None f1 0.9995138551288284
+Test accuracy of black-box on legitimate test examples: 0.999496475327291
+Training the substitute model.
+Defined TensorFlow model graph for the substitute.
+Substitute training epoch #0
+num_devices:  1
+Augmenting substitute training data.
+Labeling substitute training data.
+Substitute training epoch #1
+num_devices:  1
+Augmenting substitute training data.
+Labeling substitute training data.
+Substitute training epoch #2
+num_devices:  1
+Augmenting substitute training data.
+Labeling substitute training data.
+Substitute training epoch #3
+num_devices:  1
+Augmenting substitute training data.
+Labeling substitute training data.
+Substitute training epoch #4
+num_devices:  1
+Augmenting substitute training data.
+Labeling substitute training data.
+Substitute training epoch #5
+num_devices:  1
+save model
+MNIST_blackbox_test_clean_eval
+len(Y_test) 1986
+logit_arr (2048, 2)
+logit_arr[:len(Y_test)] [[-15.242919   17.718884 ]
+ [  5.9817295  -7.926243 ]
+ [-13.557136   15.732891 ]
+ ...
+ [ 15.657781  -19.235476 ]
+ [-15.855807   19.22024  ]
+ [ 16.671118  -20.849026 ]]
+np.argmax(logit_arr[:len(Y_test)], axis=1) [1 0 1 ... 0 1 0]
+MNIST_blackbox_test_clean_eval accuracy 0.986404833836858
+MNIST_blackbox_test_clean_eval precision 0.992133726647001
+MNIST_blackbox_test_clean_eval recall 0.9815175097276264
+MNIST_blackbox_test_clean_eval f1 0.9867970660146699
+MNIST_blackbox_test_adv_eval
+len(Y_test) 1986
+logit_arr (2048, 2)
+logit_arr[:len(Y_test)] [[-0.5978536   0.26655036]
+ [ 0.10795584 -0.686437  ]
+ [-0.6554935   0.39273933]
+ ...
+ [ 0.25880066 -0.7523389 ]
+ [-0.6603359   0.33772483]
+ [ 0.34844583 -0.96626836]]
+np.argmax(logit_arr[:len(Y_test)], axis=1) [1 0 1 ... 0 1 0]
+MNIST_blackbox_test_adv_eval accuracy 0.9425981873111783
+MNIST_blackbox_test_adv_eval precision 0.9377394636015326
+MNIST_blackbox_test_adv_eval recall 0.9523346303501945
+MNIST_blackbox_test_adv_eval f1 0.944980694980695
+Test accuracy of oracle on adversarial examples generated using the substitute: 0.9425981873111783
+MNIST_blackbox_train_adv_eval
+len(Y_test) 12033
+logit_arr (12160, 2)
+logit_arr[:len(Y_test)] [[ 0.05815594 -0.59977156]
+ [-0.62490624  0.12808953]
+ [-0.02140332 -0.42254728]
+ ...
+ [ 0.10413425 -0.62538576]
+ [-0.55575293  0.06821976]
+ [-0.02782657 -0.3956671 ]]
+np.argmax(logit_arr[:len(Y_test)], axis=1) [0 1 0 ... 0 1 0]
+MNIST_blackbox_train_adv_eval accuracy 0.9425745865536441
+MNIST_blackbox_train_adv_eval precision 0.9397089397089398
+MNIST_blackbox_train_adv_eval recall 0.9492730210016155
+MNIST_blackbox_train_adv_eval f1 0.9444667684641967
+Train accuracy of oracle on adversarial examples generated using the substitute: 0.9425745865536441
