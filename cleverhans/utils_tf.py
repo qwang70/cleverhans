@@ -15,6 +15,7 @@ import six
 from six.moves import xrange
 import tensorflow as tf
 from tensorflow.python.client import device_lib
+from tensorflow.python.platform import flags
 
 from cleverhans.compat import reduce_sum, reduce_mean
 from cleverhans.compat import reduce_max
@@ -24,6 +25,7 @@ from cleverhans.utils import batch_indices, _ArgsWrapper, create_logger
 _logger = create_logger("cleverhans.utils.tf")
 _logger.setLevel(logging.INFO)
 
+FLAGS = flags.FLAGS
 
 def model_loss(y, model, mean=True):
   """
@@ -255,7 +257,7 @@ def model_eval(sess, x, y, predictions, X_test=None, Y_test=None,
       end = min(len(X_test), start + args.batch_size)
 
       # The last batch may be smaller than all others. This should not
-      # affect the accuarcy disproportionately.
+      # affect the accuracy disproportionately.
       cur_batch_size = end - start
       X_cur[:cur_batch_size] = X_test[start:end]
       Y_cur[:cur_batch_size] = Y_test[start:end]
@@ -270,18 +272,44 @@ def model_eval(sess, x, y, predictions, X_test=None, Y_test=None,
           logit_arr = prediction_arr
         else:
           logit_arr = np.vstack((logit_arr, prediction_arr))
-
       accuracy += cur_corr_preds[:cur_batch_size].sum()
 
     assert end >= len(X_test)
 
     # Divide by number of examples to get final value
     accuracy /= len(X_test)
+
+    # calculate metric
+    true_labels = np.argmax(Y_test, axis=1)
+    pred_labels = np.argmax(logit_arr[:len(Y_test)], axis=1)
+    # True Positive (TP): we predict a label of 1 (positive), and the true label is 1.
+    TP = np.sum(np.logical_and(pred_labels == 1, true_labels == 1))
+      
+    # True Negative (TN): we predict a label of 0 (negative), and the true label is 0.
+    TN = np.sum(np.logical_and(pred_labels == 0, true_labels == 0))
+      
+    # False Positive (FP): we predict a label of 1 (positive), but the true label is 0.
+    FP = np.sum(np.logical_and(pred_labels == 1, true_labels == 0))
+      
+    # False Negative (FN): we predict a label of 0 (negative), but the true label is 1.
+    FN = np.sum(np.logical_and(pred_labels == 0, true_labels == 1))
+
+    recall = TP/float(TP+FN)
+    precision = TP/float(TP+FP)
+    f1 = 2.*TP/(2.*TP + FP + FN)  
+  print(filename, "accuracy", accuracy)
+  print(filename, "precision", precision)
+  print(filename, "recall", recall)
+  print(filename, "f1", f1)
   if save_logit:
     assert len(logit_arr) >= len(X_test) 
     logit_arr = logit_arr[:len(X_test)]
     assert len(logit_arr) == len(X_test) 
-    with open('../../pickle/{}.pickle'.format(filename), 'wb') as handle:
+    if 'preprocess' in FLAGS.__flags:
+      preprocess = FLAGS.preprocess
+    else:
+      preprocess = ''
+    with open('../../cleverhans/pickle/{}_{}.pickle'.format(filename, preprocess), 'wb') as handle:
       pickle.dump(logit_arr, handle)
 
   return accuracy

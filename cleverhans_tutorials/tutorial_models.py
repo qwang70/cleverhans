@@ -60,3 +60,18 @@ def make_basic_picklable_cnn(nb_filters=64, nb_classes=10,
             Softmax()]
   model = MLP(layers, input_shape)
   return model
+  
+def make_basic_picklable_substitute(nb_filters=200, nb_classes=2,
+                             input_shape=(None, 28, 28, 1)):
+  """The model for the picklable models tutorial.
+  """
+  layers = [
+            Flatten(),
+            Linear(nb_filters),
+            ReLU(),
+            Linear(nb_filters),
+            ReLU(),
+            Linear(nb_classes),
+            Softmax()]
+  model = MLP(layers, input_shape)
+  return model

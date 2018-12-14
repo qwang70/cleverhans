@@ -189,6 +189,9 @@ class Linear(Layer):
       scale = np.sqrt(3. / dim)
       init = tf.random_uniform([dim, self.num_hid], dtype=tf.float32,
                                minval=-scale, maxval=scale)
+    elif self.init_mode == 'he':
+      std = tf.rsqrt(tf.cast(tf.reduce_prod(dim), tf.float32) + 1e-7)
+      init = tf.random_normal([dim, self.num_hid], stddev=std, dtype=tf.float32)
     else:
       raise ValueError(self.init_mode)
     self.W = PV(init)

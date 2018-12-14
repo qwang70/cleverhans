@@ -12,6 +12,7 @@ from __future__ import unicode_literals
 import functools
 import logging
 import numpy as np
+import pickle
 from six.moves import xrange
 import tensorflow as tf
 from tensorflow.python.platform import flags
@@ -19,7 +20,9 @@ from tensorflow.python.platform import flags
 from cleverhans.attacks import FastGradientMethod
 from cleverhans.attacks_tf import jacobian_graph, jacobian_augmentation
 ### IMPORT BINARY MNIST ###
-from cleverhans.dataset import MNIST, MNIST_67
+from project_utils import get_MNIST_67_preprocess
+from cleverhans.serial import save
+from cleverhans_tutorials.tutorial_models import make_basic_picklable_cnn, make_basic_picklable_substitute
 from cleverhans.initializers import HeReLuNormalInitializer
 from cleverhans.loss import CrossEntropy
 from cleverhans.model import Model
@@ -80,7 +83,7 @@ def prep_bbox(sess, x, y, x_train, y_train, x_test, y_test,
 
   # Define TF model graph (for the black-box model)
   nb_filters = 64
-  model = ModelBasicCNN('model1', nb_classes, nb_filters)
+  model = make_basic_picklable_cnn(nb_filters=nb_filters, nb_classes=nb_classes)
   loss = CrossEntropy(model, smoothing=0.1)
   predictions = model.get_logits(x)
   print("Defined TensorFlow model graph.")
@@ -109,6 +112,7 @@ class ModelSubstitute(Model):
     self.nb_filters = nb_filters
 
   def fprop(self, x, **kwargs):
+    print("fprop")
     del kwargs
     my_dense = functools.partial(
         tf.layers.dense, kernel_initializer=HeReLuNormalInitializer)
@@ -124,7 +128,7 @@ class ModelSubstitute(Model):
 def train_sub(sess, x, y, bbox_preds, x_sub, y_sub, nb_classes,
               nb_epochs_s, batch_size, learning_rate, data_aug, lmbda,
               aug_batch_size, rng, img_rows=28, img_cols=28,
-              nchannels=1):
+              nchannels=1, preprocess=''):
   """
   This function creates the substitute by alternatively
   augmenting the training data and training the substitute.
@@ -144,7 +148,8 @@ def train_sub(sess, x, y, bbox_preds, x_sub, y_sub, nb_classes,
   :return:
   """
   # Define TF model graph (for the black-box model)
-  model_sub = ModelSubstitute('model_s', nb_classes)
+  #model_sub = ModelSubstitute('model_s', nb_classes)
+  model_sub = make_basic_picklable_substitute(nb_classes=nb_classes)
   preds_sub = model_sub.get_logits(x)
   loss_sub = CrossEntropy(model_sub, smoothing=0)
 
@@ -186,6 +191,10 @@ def train_sub(sess, x, y, bbox_preds, x_sub, y_sub, nb_classes,
       # by the black-box model
       y_sub[int(len(x_sub)/2):] = np.argmax(bbox_val, axis=1)
 
+  #Now, save the graph
+  print("save model")
+  with sess.as_default():
+      save("../models/{}_{}.joblib".format(FILENAME, preprocess), model_sub)
   return model_sub, preds_sub
 
 
@@ -194,7 +203,7 @@ def mnist_blackbox(train_start=0, train_end=60000, test_start=0,
                    batch_size=BATCH_SIZE, learning_rate=LEARNING_RATE,
                    nb_epochs=NB_EPOCHS, holdout=HOLDOUT, data_aug=DATA_AUG,
                    nb_epochs_s=NB_EPOCHS_S, lmbda=LMBDA,
-                   aug_batch_size=AUG_BATCH_SIZE):
+                   aug_batch_size=AUG_BATCH_SIZE, preprocess=''):
   """
   MNIST tutorial for the black-box attack from arxiv.org/abs/1602.02697
   :param train_start: index of first training set example
@@ -221,10 +230,11 @@ def mnist_blackbox(train_start=0, train_end=60000, test_start=0,
   sess = tf.Session()
 
   # Get MNIST data
-  mnist = MNIST_67(train_start=train_start, train_end=train_end,
-                test_start=test_start, test_end=test_end)
-  x_train, y_train = mnist.get_set('train')
-  x_test, y_test = mnist.get_set('test')
+  # mnist = MNIST_67(train_start=train_start, train_end=train_end,
+  #               test_start=test_start, test_end=test_end)
+  # x_train, y_train = mnist.get_set('train')
+  # x_test, y_test = mnist.get_set('test')
+  x_train, y_train, x_test, y_test = get_MNIST_67_preprocess(preprocess=preprocess)
 
   # Initialize substitute training set reserved for adversary
   # x_sub = x_test[:holdout]
@@ -263,13 +273,13 @@ def mnist_blackbox(train_start=0, train_end=60000, test_start=0,
   train_sub_out = train_sub(sess, x, y, bbox_preds, x_sub, y_sub,
                             nb_classes, nb_epochs_s, batch_size,
                             learning_rate, data_aug, lmbda, aug_batch_size,
-                            rng, img_rows, img_cols, nchannels)
+                            rng, img_rows, img_cols, nchannels, preprocess)
   model_sub, preds_sub = train_sub_out
 
   # Evaluate the substitute model on clean test examples
   eval_params = {'batch_size': batch_size}
   acc = model_eval(sess, x, y, preds_sub, x_test, y_test, save_logit=True, 
-                      filename=FLAGS.filename+"_clean_train_clean_eval", args=eval_params)
+                      filename=FLAGS.filename+"_test_clean_eval", args=eval_params)
   accuracies['sub'] = acc
 
   # Initialize the Fast Gradient Sign Method (FGSM) attack object.
@@ -283,9 +293,22 @@ def mnist_blackbox(train_start=0, train_end=60000, test_start=0,
   # Evaluate the accuracy of the "black-box" model on adversarial examples
   accuracy = model_eval(sess, x, y, model.get_logits(x_adv_sub),
                         x_test, y_test, save_logit=True, 
-                      filename=FLAGS.filename+"_clean_train_adv_eval", args=eval_params)
+                      filename=FLAGS.filename+"_test_adv_eval", args=eval_params)
   print('Test accuracy of oracle on adversarial examples generated '
         'using the substitute: ' + str(accuracy))
+
+  # Evaluate the accuracy the "black-box" model on adversarial examples of training data
+  accuracy = model_eval(sess, x, y, model.get_logits(x_adv_sub),
+                        x_train, y_train, save_logit=True, 
+                      filename=FLAGS.filename+"_train_adv_eval", args=eval_params)
+  print('Train accuracy of oracle on adversarial examples generated '
+        'using the substitute: ' + str(accuracy))
+
+  with open('../pickle/{}_y_train.pickle'.format(FILENAME), 'wb') as handle:
+      pickle.dump(y_train, handle)
+  with open('../pickle/{}_y_test.pickle'.format(FILENAME), 'wb') as handle:
+      pickle.dump(y_test, handle)
+
   accuracies['bbox_on_sub_adv_ex'] = accuracy
 
   return accuracies
@@ -299,7 +322,8 @@ def main(argv=None):
                  learning_rate=FLAGS.learning_rate,
                  nb_epochs=FLAGS.nb_epochs, holdout=FLAGS.holdout,
                  data_aug=FLAGS.data_aug, nb_epochs_s=FLAGS.nb_epochs_s,
-                 lmbda=FLAGS.lmbda, aug_batch_size=FLAGS.data_aug_batch_size)
+                 lmbda=FLAGS.lmbda, aug_batch_size=FLAGS.data_aug_batch_size, 
+                 preprocess=FLAGS.preprocess)
 
 
 if __name__ == '__main__':
@@ -329,6 +353,8 @@ if __name__ == '__main__':
   ### ADD FLAGS ###
   flags.DEFINE_bool('testing', True, 'Evaluate Testing data')
   flags.DEFINE_string('filename', FILENAME,
+                       'filename prefix for save logit')
+  flags.DEFINE_string('preprocess', '',
                        'filename prefix for save logit')
 
   tf.app.run()

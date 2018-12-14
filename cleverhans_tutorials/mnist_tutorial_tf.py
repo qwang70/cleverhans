@@ -15,10 +15,14 @@ import logging
 import numpy as np
 import tensorflow as tf
 from tensorflow.python.platform import flags
-from ../../generate_data import get_MNIST_67_preprocess
+import pickle
+
 
 from cleverhans.loss import CrossEntropy
 ### IMPORT BINARY MNIST ###
+from project_utils import get_MNIST_67_preprocess
+from cleverhans.serial import save
+from cleverhans_tutorials.tutorial_models import make_basic_picklable_cnn
 from cleverhans.dataset import MNIST, MNIST_67
 from cleverhans.utils_tf import model_eval
 from cleverhans.train import train
@@ -42,7 +46,7 @@ def mnist_tutorial(train_start=0, train_end=60000, test_start=0,
                    test_end=10000, nb_epochs=NB_EPOCHS, batch_size=BATCH_SIZE,
                    learning_rate=LEARNING_RATE,
                    clean_train=CLEAN_TRAIN,
-                   testing=False,
+                   testing=False, preprocess='',
                    backprop_through_attack=BACKPROP_THROUGH_ATTACK,
                    nb_filters=NB_FILTERS, num_threads=None,
                    label_smoothing=0.1):
@@ -88,7 +92,11 @@ def mnist_tutorial(train_start=0, train_end=60000, test_start=0,
   #               test_start=test_start, test_end=test_end)
   # x_train, y_train = mnist.get_set('train')
   # x_test, y_test = mnist.get_set('test')
-
+  x_train, y_train, x_test, y_test = get_MNIST_67_preprocess(preprocess=preprocess)
+  with open('../pickle/{}_y_train.pickle'.format(FILENAME), 'wb') as handle:
+      pickle.dump(y_train, handle)
+  with open('../pickle/{}_y_test.pickle'.format(FILENAME), 'wb') as handle:
+      pickle.dump(y_test, handle)
   # Use Image Parameters
   img_rows, img_cols, nchannels = x_train.shape[1:4]
   nb_classes = y_train.shape[1]
@@ -111,7 +119,7 @@ def mnist_tutorial(train_start=0, train_end=60000, test_start=0,
       'clip_max': 1.
   }
   rng = np.random.RandomState([2017, 8, 30])
-  
+
   ### ADD PARAMETERS ###  
   def do_eval(preds, x_set, y_set, report_key, is_adv=None):
     acc = model_eval(sess, x, y, preds, x_set, y_set, save_logit=True, 
@@ -127,7 +135,9 @@ def mnist_tutorial(train_start=0, train_end=60000, test_start=0,
       print('Test accuracy on %s examples: %0.4f' % (report_text, acc))
 
   if clean_train:
-    model = ModelBasicCNN('model1', nb_classes, nb_filters)
+    ### picklable ###
+    #model = ModelBasicCNN('model1', nb_classes, nb_filters)
+    model = make_basic_picklable_cnn(nb_filters=nb_filters, nb_classes=nb_classes)
     preds = model.get_logits(x)
     loss = CrossEntropy(model, smoothing=label_smoothing)
 
@@ -157,7 +167,10 @@ def mnist_tutorial(train_start=0, train_end=60000, test_start=0,
     print('Repeating the process, using adversarial training')
 
   # Create a new model and train it to be robust to FastGradientMethod
-  model2 = ModelBasicCNN('model2', nb_classes, nb_filters)
+  ### picklable ###
+  #model2 = ModelBasicCNN('model2', nb_classes, nb_filters)
+  model2 = make_basic_picklable_cnn(nb_filters=nb_filters, nb_classes=nb_classes)
+    
   fgsm2 = FastGradientMethod(model2, sess=sess)
 
   def attack(x):
@@ -186,6 +199,11 @@ def mnist_tutorial(train_start=0, train_end=60000, test_start=0,
   # Perform and evaluate adversarial training
   train(sess, loss2, x_train, y_train, evaluate=evaluate2,
         args=train_params, rng=rng, var_list=model2.get_params())
+        
+  #Now, save the graph
+  with sess.as_default():
+      save("../models/{}_{}.joblib".format(FILENAME, preprocess), model2)
+
 
   # Calculate training errors
   if testing:
@@ -204,7 +222,7 @@ def main(argv=None):
                  clean_train=FLAGS.clean_train,
                  backprop_through_attack=FLAGS.backprop_through_attack,
                  nb_filters=FLAGS.nb_filters,
-                 testing=FLAGS.testing)
+                 testing=FLAGS.testing, preprocess=FLAGS.preprocess)
 
 
 if __name__ == '__main__':
@@ -223,6 +241,8 @@ if __name__ == '__main__':
   ### ADD FLAGS ###
   flags.DEFINE_bool('testing', True, 'Evaluate Testing data')
   flags.DEFINE_string('filename', FILENAME,
+                       'filename prefix for save logit')
+  flags.DEFINE_string('preprocess', '',
                        'filename prefix for save logit')
 
   tf.app.run()
