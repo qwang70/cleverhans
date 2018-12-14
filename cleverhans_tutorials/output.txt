@@ -1,0 +1,423 @@
+num_devices:  1
+MNIST_FGSM_clean_train_clean_eval
+MNIST_FGSM_clean_train_clean_eval accuracy 0.998992950654582
+MNIST_FGSM_clean_train_clean_eval precision 0.9990272373540856
+MNIST_FGSM_clean_train_clean_eval recall 0.9990272373540856
+MNIST_FGSM_clean_train_clean_eval f1 0.9990272373540856
+Test accuracy on legitimate examples: 0.9990
+MNIST_FGSM_clean_train_clean_eval
+MNIST_FGSM_clean_train_clean_eval accuracy 0.999496475327291
+MNIST_FGSM_clean_train_clean_eval precision 0.9990281827016521
+MNIST_FGSM_clean_train_clean_eval recall 1.0
+MNIST_FGSM_clean_train_clean_eval f1 0.9995138551288284
+Test accuracy on legitimate examples: 0.9995
+MNIST_FGSM_clean_train_clean_eval
+MNIST_FGSM_clean_train_clean_eval accuracy 0.999496475327291
+MNIST_FGSM_clean_train_clean_eval precision 0.9990281827016521
+MNIST_FGSM_clean_train_clean_eval recall 1.0
+MNIST_FGSM_clean_train_clean_eval f1 0.9995138551288284
+Test accuracy on legitimate examples: 0.9995
+MNIST_FGSM_clean_train_clean_eval
+MNIST_FGSM_clean_train_clean_eval accuracy 0.999496475327291
+MNIST_FGSM_clean_train_clean_eval precision 0.9990281827016521
+MNIST_FGSM_clean_train_clean_eval recall 1.0
+MNIST_FGSM_clean_train_clean_eval f1 0.9995138551288284
+Test accuracy on legitimate examples: 0.9995
+MNIST_FGSM_clean_train_clean_eval
+MNIST_FGSM_clean_train_clean_eval accuracy 0.999496475327291
+MNIST_FGSM_clean_train_clean_eval precision 0.9990281827016521
+MNIST_FGSM_clean_train_clean_eval recall 1.0
+MNIST_FGSM_clean_train_clean_eval f1 0.9995138551288284
+Test accuracy on legitimate examples: 0.9995
+MNIST_FGSM_clean_train_clean_eval
+MNIST_FGSM_clean_train_clean_eval accuracy 0.999496475327291
+MNIST_FGSM_clean_train_clean_eval precision 0.9990281827016521
+MNIST_FGSM_clean_train_clean_eval recall 1.0
+MNIST_FGSM_clean_train_clean_eval f1 0.9995138551288284
+Test accuracy on legitimate examples: 0.9995
+MNIST_FGSM_train_clean_train_clean_eval
+MNIST_FGSM_train_clean_train_clean_eval accuracy 1.0
+MNIST_FGSM_train_clean_train_clean_eval precision 1.0
+MNIST_FGSM_train_clean_train_clean_eval recall 1.0
+MNIST_FGSM_train_clean_train_clean_eval f1 1.0
+MNIST_FGSM_clean_train_adv_eval
+MNIST_FGSM_clean_train_adv_eval accuracy 0.7195367573011078
+MNIST_FGSM_clean_train_adv_eval precision 0.7215428033866416
+MNIST_FGSM_clean_train_adv_eval recall 0.7461089494163424
+MNIST_FGSM_clean_train_adv_eval f1 0.7336202773792444
+Test accuracy on adversarial examples: 0.7195
+MNIST_FGSM_train_clean_train_adv_eval
+MNIST_FGSM_train_clean_train_adv_eval accuracy 0.7229746367889682
+MNIST_FGSM_train_clean_train_adv_eval precision 0.7282780410742496
+MNIST_FGSM_train_clean_train_adv_eval recall 0.7358339984038308
+MNIST_FGSM_train_clean_train_adv_eval f1 0.7320365224295355
+Repeating the process, using adversarial training
+num_devices:  1
+MNIST_FGSM_adv_train_clean_eval
+MNIST_FGSM_adv_train_clean_eval accuracy 0.999496475327291
+MNIST_FGSM_adv_train_clean_eval precision 1.0
+MNIST_FGSM_adv_train_clean_eval recall 0.9990272373540856
+MNIST_FGSM_adv_train_clean_eval f1 0.9995133819951338
+Test accuracy on legitimate examples: 0.9995
+MNIST_FGSM_adv_train_adv_eval
+MNIST_FGSM_adv_train_adv_eval accuracy 0.9451158106747231
+MNIST_FGSM_adv_train_adv_eval precision 0.9618090452261306
+MNIST_FGSM_adv_train_adv_eval recall 0.9309338521400778
+MNIST_FGSM_adv_train_adv_eval f1 0.9461196243203164
+Test accuracy on adversarial examples: 0.9451
+MNIST_FGSM_adv_train_clean_eval
+MNIST_FGSM_adv_train_clean_eval accuracy 0.999496475327291
+MNIST_FGSM_adv_train_clean_eval precision 0.9990281827016521
+MNIST_FGSM_adv_train_clean_eval recall 1.0
+MNIST_FGSM_adv_train_clean_eval f1 0.9995138551288284
+Test accuracy on legitimate examples: 0.9995
+MNIST_FGSM_adv_train_adv_eval
+MNIST_FGSM_adv_train_adv_eval accuracy 0.972306143001007
+MNIST_FGSM_adv_train_adv_eval precision 0.9737098344693281
+MNIST_FGSM_adv_train_adv_eval recall 0.9727626459143969
+MNIST_FGSM_adv_train_adv_eval f1 0.9732360097323601
+Test accuracy on adversarial examples: 0.9723
+MNIST_FGSM_adv_train_clean_eval
+MNIST_FGSM_adv_train_clean_eval accuracy 0.999496475327291
+MNIST_FGSM_adv_train_clean_eval precision 0.9990281827016521
+MNIST_FGSM_adv_train_clean_eval recall 1.0
+MNIST_FGSM_adv_train_clean_eval f1 0.9995138551288284
+Test accuracy on legitimate examples: 0.9995
+MNIST_FGSM_adv_train_adv_eval
+MNIST_FGSM_adv_train_adv_eval accuracy 0.9768378650553877
+MNIST_FGSM_adv_train_adv_eval precision 0.9794921875
+MNIST_FGSM_adv_train_adv_eval recall 0.97568093385214
+MNIST_FGSM_adv_train_adv_eval f1 0.9775828460038987
+Test accuracy on adversarial examples: 0.9768
+MNIST_FGSM_adv_train_clean_eval
+MNIST_FGSM_adv_train_clean_eval accuracy 0.999496475327291
+MNIST_FGSM_adv_train_clean_eval precision 0.9990281827016521
+MNIST_FGSM_adv_train_clean_eval recall 1.0
+MNIST_FGSM_adv_train_clean_eval f1 0.9995138551288284
+Test accuracy on legitimate examples: 0.9995
+MNIST_FGSM_adv_train_adv_eval
+MNIST_FGSM_adv_train_adv_eval accuracy 0.9848942598187311
+MNIST_FGSM_adv_train_adv_eval precision 0.9911417322834646
+MNIST_FGSM_adv_train_adv_eval recall 0.9795719844357976
+MNIST_FGSM_adv_train_adv_eval f1 0.9853228962818004
+Test accuracy on adversarial examples: 0.9849
+MNIST_FGSM_adv_train_clean_eval
+MNIST_FGSM_adv_train_clean_eval accuracy 0.999496475327291
+MNIST_FGSM_adv_train_clean_eval precision 0.9990281827016521
+MNIST_FGSM_adv_train_clean_eval recall 1.0
+MNIST_FGSM_adv_train_clean_eval f1 0.9995138551288284
+Test accuracy on legitimate examples: 0.9995
+MNIST_FGSM_adv_train_adv_eval
+MNIST_FGSM_adv_train_adv_eval accuracy 0.9853977844914401
+MNIST_FGSM_adv_train_adv_eval precision 0.9882697947214076
+MNIST_FGSM_adv_train_adv_eval recall 0.9834630350194552
+MNIST_FGSM_adv_train_adv_eval f1 0.9858605558264262
+Test accuracy on adversarial examples: 0.9854
+MNIST_FGSM_adv_train_clean_eval
+MNIST_FGSM_adv_train_clean_eval accuracy 0.999496475327291
+MNIST_FGSM_adv_train_clean_eval precision 0.9990281827016521
+MNIST_FGSM_adv_train_clean_eval recall 1.0
+MNIST_FGSM_adv_train_clean_eval f1 0.9995138551288284
+Test accuracy on legitimate examples: 0.9995
+MNIST_FGSM_adv_train_adv_eval
+MNIST_FGSM_adv_train_adv_eval accuracy 0.9853977844914401
+MNIST_FGSM_adv_train_adv_eval precision 0.9901864573110893
+MNIST_FGSM_adv_train_adv_eval recall 0.9815175097276264
+MNIST_FGSM_adv_train_adv_eval f1 0.9858329262335125
+Test accuracy on adversarial examples: 0.9854
+MNIST_FGSM_train_adv_train_clean_eval
+MNIST_FGSM_train_adv_train_clean_eval accuracy 1.0
+MNIST_FGSM_train_adv_train_clean_eval precision 1.0
+MNIST_FGSM_train_adv_train_clean_eval recall 1.0
+MNIST_FGSM_train_adv_train_clean_eval f1 1.0
+MNIST_FGSM_train_adv_train_adv_eval
+MNIST_FGSM_train_adv_train_adv_eval accuracy 0.9963063284905196
+MNIST_FGSM_train_adv_train_adv_eval precision 0.9980781550288277
+MNIST_FGSM_train_adv_train_adv_eval recall 0.994732641660016
+MNIST_FGSM_train_adv_train_adv_eval f1 0.9964025901351027
+num_devices:  1
+MNIST_FGSM_clean_train_clean_eval
+MNIST_FGSM_clean_train_clean_eval accuracy 0.999496475327291
+MNIST_FGSM_clean_train_clean_eval precision 0.9990281827016521
+MNIST_FGSM_clean_train_clean_eval recall 1.0
+MNIST_FGSM_clean_train_clean_eval f1 0.9995138551288284
+Test accuracy on legitimate examples: 0.9995
+MNIST_FGSM_clean_train_clean_eval
+MNIST_FGSM_clean_train_clean_eval accuracy 0.999496475327291
+MNIST_FGSM_clean_train_clean_eval precision 0.9990281827016521
+MNIST_FGSM_clean_train_clean_eval recall 1.0
+MNIST_FGSM_clean_train_clean_eval f1 0.9995138551288284
+Test accuracy on legitimate examples: 0.9995
+MNIST_FGSM_clean_train_clean_eval
+MNIST_FGSM_clean_train_clean_eval accuracy 0.999496475327291
+MNIST_FGSM_clean_train_clean_eval precision 0.9990281827016521
+MNIST_FGSM_clean_train_clean_eval recall 1.0
+MNIST_FGSM_clean_train_clean_eval f1 0.9995138551288284
+Test accuracy on legitimate examples: 0.9995
+MNIST_FGSM_clean_train_clean_eval
+MNIST_FGSM_clean_train_clean_eval accuracy 0.999496475327291
+MNIST_FGSM_clean_train_clean_eval precision 0.9990281827016521
+MNIST_FGSM_clean_train_clean_eval recall 1.0
+MNIST_FGSM_clean_train_clean_eval f1 0.9995138551288284
+Test accuracy on legitimate examples: 0.9995
+MNIST_FGSM_clean_train_clean_eval
+MNIST_FGSM_clean_train_clean_eval accuracy 0.999496475327291
+MNIST_FGSM_clean_train_clean_eval precision 0.9990281827016521
+MNIST_FGSM_clean_train_clean_eval recall 1.0
+MNIST_FGSM_clean_train_clean_eval f1 0.9995138551288284
+Test accuracy on legitimate examples: 0.9995
+MNIST_FGSM_clean_train_clean_eval
+MNIST_FGSM_clean_train_clean_eval accuracy 0.999496475327291
+MNIST_FGSM_clean_train_clean_eval precision 0.9990281827016521
+MNIST_FGSM_clean_train_clean_eval recall 1.0
+MNIST_FGSM_clean_train_clean_eval f1 0.9995138551288284
+Test accuracy on legitimate examples: 0.9995
+MNIST_FGSM_train_clean_train_clean_eval
+MNIST_FGSM_train_clean_train_clean_eval accuracy 1.0
+MNIST_FGSM_train_clean_train_clean_eval precision 1.0
+MNIST_FGSM_train_clean_train_clean_eval recall 1.0
+MNIST_FGSM_train_clean_train_clean_eval f1 1.0
+MNIST_FGSM_clean_train_adv_eval
+MNIST_FGSM_clean_train_adv_eval accuracy 0.14954682779456194
+MNIST_FGSM_clean_train_adv_eval precision 0.16649848637739656
+MNIST_FGSM_clean_train_adv_eval recall 0.1605058365758755
+MNIST_FGSM_clean_train_adv_eval f1 0.16344725111441308
+Test accuracy on adversarial examples: 0.1495
+MNIST_FGSM_train_clean_train_adv_eval
+MNIST_FGSM_train_clean_train_adv_eval accuracy 0.16687187063941558
+MNIST_FGSM_train_clean_train_adv_eval precision 0.19269102990033224
+MNIST_FGSM_train_clean_train_adv_eval recall 0.19441340782122904
+MNIST_FGSM_train_clean_train_adv_eval f1 0.1935483870967742
+Repeating the process, using adversarial training
+num_devices:  1
+MNIST_FGSM_adv_train_clean_eval
+MNIST_FGSM_adv_train_clean_eval accuracy 0.999496475327291
+MNIST_FGSM_adv_train_clean_eval precision 0.9990281827016521
+MNIST_FGSM_adv_train_clean_eval recall 1.0
+MNIST_FGSM_adv_train_clean_eval f1 0.9995138551288284
+Test accuracy on legitimate examples: 0.9995
+MNIST_FGSM_adv_train_adv_eval
+MNIST_FGSM_adv_train_adv_eval accuracy 0.973816717019134
+MNIST_FGSM_adv_train_adv_eval precision 0.9621212121212122
+MNIST_FGSM_adv_train_adv_eval recall 0.9883268482490273
+MNIST_FGSM_adv_train_adv_eval f1 0.9750479846449136
+Test accuracy on adversarial examples: 0.9738
+MNIST_FGSM_adv_train_clean_eval
+MNIST_FGSM_adv_train_clean_eval accuracy 0.999496475327291
+MNIST_FGSM_adv_train_clean_eval precision 0.9990281827016521
+MNIST_FGSM_adv_train_clean_eval recall 1.0
+MNIST_FGSM_adv_train_clean_eval f1 0.9995138551288284
+Test accuracy on legitimate examples: 0.9995
+MNIST_FGSM_adv_train_adv_eval
+MNIST_FGSM_adv_train_adv_eval accuracy 0.9969788519637462
+MNIST_FGSM_adv_train_adv_eval precision 0.996116504854369
+MNIST_FGSM_adv_train_adv_eval recall 0.9980544747081712
+MNIST_FGSM_adv_train_adv_eval f1 0.9970845481049563
+Test accuracy on adversarial examples: 0.9970
+MNIST_FGSM_adv_train_clean_eval
+MNIST_FGSM_adv_train_clean_eval accuracy 0.999496475327291
+MNIST_FGSM_adv_train_clean_eval precision 0.9990281827016521
+MNIST_FGSM_adv_train_clean_eval recall 1.0
+MNIST_FGSM_adv_train_clean_eval f1 0.9995138551288284
+Test accuracy on legitimate examples: 0.9995
+MNIST_FGSM_adv_train_adv_eval
+MNIST_FGSM_adv_train_adv_eval accuracy 0.9974823766364552
+MNIST_FGSM_adv_train_adv_eval precision 0.9961202715809894
+MNIST_FGSM_adv_train_adv_eval recall 0.9990272373540856
+MNIST_FGSM_adv_train_adv_eval f1 0.9975716367168529
+Test accuracy on adversarial examples: 0.9975
+MNIST_FGSM_adv_train_clean_eval
+MNIST_FGSM_adv_train_clean_eval accuracy 0.999496475327291
+MNIST_FGSM_adv_train_clean_eval precision 0.9990281827016521
+MNIST_FGSM_adv_train_clean_eval recall 1.0
+MNIST_FGSM_adv_train_clean_eval f1 0.9995138551288284
+Test accuracy on legitimate examples: 0.9995
+MNIST_FGSM_adv_train_adv_eval
+MNIST_FGSM_adv_train_adv_eval accuracy 0.998992950654582
+MNIST_FGSM_adv_train_adv_eval precision 0.9990272373540856
+MNIST_FGSM_adv_train_adv_eval recall 0.9990272373540856
+MNIST_FGSM_adv_train_adv_eval f1 0.9990272373540856
+Test accuracy on adversarial examples: 0.9990
+MNIST_FGSM_adv_train_clean_eval
+MNIST_FGSM_adv_train_clean_eval accuracy 0.999496475327291
+MNIST_FGSM_adv_train_clean_eval precision 0.9990281827016521
+MNIST_FGSM_adv_train_clean_eval recall 1.0
+MNIST_FGSM_adv_train_clean_eval f1 0.9995138551288284
+Test accuracy on legitimate examples: 0.9995
+MNIST_FGSM_adv_train_adv_eval
+MNIST_FGSM_adv_train_adv_eval accuracy 0.999496475327291
+MNIST_FGSM_adv_train_adv_eval precision 0.9990281827016521
+MNIST_FGSM_adv_train_adv_eval recall 1.0
+MNIST_FGSM_adv_train_adv_eval f1 0.9995138551288284
+Test accuracy on adversarial examples: 0.9995
+MNIST_FGSM_adv_train_clean_eval
+MNIST_FGSM_adv_train_clean_eval accuracy 0.999496475327291
+MNIST_FGSM_adv_train_clean_eval precision 0.9990281827016521
+MNIST_FGSM_adv_train_clean_eval recall 1.0
+MNIST_FGSM_adv_train_clean_eval f1 0.9995138551288284
+Test accuracy on legitimate examples: 0.9995
+MNIST_FGSM_adv_train_adv_eval
+MNIST_FGSM_adv_train_adv_eval accuracy 1.0
+MNIST_FGSM_adv_train_adv_eval precision 1.0
+MNIST_FGSM_adv_train_adv_eval recall 1.0
+MNIST_FGSM_adv_train_adv_eval f1 1.0
+Test accuracy on adversarial examples: 1.0000
+MNIST_FGSM_train_adv_train_clean_eval
+MNIST_FGSM_train_adv_train_clean_eval accuracy 1.0
+MNIST_FGSM_train_adv_train_clean_eval precision 1.0
+MNIST_FGSM_train_adv_train_clean_eval recall 1.0
+MNIST_FGSM_train_adv_train_clean_eval f1 1.0
+MNIST_FGSM_train_adv_train_adv_eval
+MNIST_FGSM_train_adv_train_adv_eval accuracy 1.0
+MNIST_FGSM_train_adv_train_adv_eval precision 1.0
+MNIST_FGSM_train_adv_train_adv_eval recall 1.0
+MNIST_FGSM_train_adv_train_adv_eval f1 1.0
+num_devices:  1
+MNIST_FGSM_clean_train_clean_eval
+MNIST_FGSM_clean_train_clean_eval accuracy 0.999496475327291
+MNIST_FGSM_clean_train_clean_eval precision 0.9990281827016521
+MNIST_FGSM_clean_train_clean_eval recall 1.0
+MNIST_FGSM_clean_train_clean_eval f1 0.9995138551288284
+Test accuracy on legitimate examples: 0.9995
+MNIST_FGSM_clean_train_clean_eval
+MNIST_FGSM_clean_train_clean_eval accuracy 0.999496475327291
+MNIST_FGSM_clean_train_clean_eval precision 0.9990281827016521
+MNIST_FGSM_clean_train_clean_eval recall 1.0
+MNIST_FGSM_clean_train_clean_eval f1 0.9995138551288284
+Test accuracy on legitimate examples: 0.9995
+MNIST_FGSM_clean_train_clean_eval
+MNIST_FGSM_clean_train_clean_eval accuracy 0.999496475327291
+MNIST_FGSM_clean_train_clean_eval precision 0.9990281827016521
+MNIST_FGSM_clean_train_clean_eval recall 1.0
+MNIST_FGSM_clean_train_clean_eval f1 0.9995138551288284
+Test accuracy on legitimate examples: 0.9995
+MNIST_FGSM_clean_train_clean_eval
+MNIST_FGSM_clean_train_clean_eval accuracy 0.999496475327291
+MNIST_FGSM_clean_train_clean_eval precision 0.9990281827016521
+MNIST_FGSM_clean_train_clean_eval recall 1.0
+MNIST_FGSM_clean_train_clean_eval f1 0.9995138551288284
+Test accuracy on legitimate examples: 0.9995
+MNIST_FGSM_clean_train_clean_eval
+MNIST_FGSM_clean_train_clean_eval accuracy 0.999496475327291
+MNIST_FGSM_clean_train_clean_eval precision 0.9990281827016521
+MNIST_FGSM_clean_train_clean_eval recall 1.0
+MNIST_FGSM_clean_train_clean_eval f1 0.9995138551288284
+Test accuracy on legitimate examples: 0.9995
+MNIST_FGSM_clean_train_clean_eval
+MNIST_FGSM_clean_train_clean_eval accuracy 0.999496475327291
+MNIST_FGSM_clean_train_clean_eval precision 0.9990281827016521
+MNIST_FGSM_clean_train_clean_eval recall 1.0
+MNIST_FGSM_clean_train_clean_eval f1 0.9995138551288284
+Test accuracy on legitimate examples: 0.9995
+MNIST_FGSM_train_clean_train_clean_eval
+MNIST_FGSM_train_clean_train_clean_eval accuracy 1.0
+MNIST_FGSM_train_clean_train_clean_eval precision 1.0
+MNIST_FGSM_train_clean_train_clean_eval recall 1.0
+MNIST_FGSM_train_clean_train_clean_eval f1 1.0
+MNIST_FGSM_clean_train_adv_eval
+MNIST_FGSM_clean_train_adv_eval accuracy 0.8368580060422961
+MNIST_FGSM_clean_train_adv_eval precision 0.8194192377495463
+MNIST_FGSM_clean_train_adv_eval recall 0.8784046692607004
+MNIST_FGSM_clean_train_adv_eval f1 0.847887323943662
+Test accuracy on adversarial examples: 0.8369
+MNIST_FGSM_train_clean_train_adv_eval
+MNIST_FGSM_train_clean_train_adv_eval accuracy 0.8488057128786013
+MNIST_FGSM_train_clean_train_adv_eval precision 0.8311124419823327
+MNIST_FGSM_train_clean_train_adv_eval recall 0.8860335195530726
+MNIST_FGSM_train_clean_train_adv_eval f1 0.8576946847960445
+Repeating the process, using adversarial training
+num_devices:  1
+MNIST_FGSM_adv_train_clean_eval
+MNIST_FGSM_adv_train_clean_eval accuracy 0.999496475327291
+MNIST_FGSM_adv_train_clean_eval precision 0.9990281827016521
+MNIST_FGSM_adv_train_clean_eval recall 1.0
+MNIST_FGSM_adv_train_clean_eval f1 0.9995138551288284
+Test accuracy on legitimate examples: 0.9995
+MNIST_FGSM_adv_train_adv_eval
+MNIST_FGSM_adv_train_adv_eval accuracy 0.9627391742195368
+MNIST_FGSM_adv_train_adv_eval precision 0.9622093023255814
+MNIST_FGSM_adv_train_adv_eval recall 0.9659533073929961
+MNIST_FGSM_adv_train_adv_eval f1 0.9640776699029127
+Test accuracy on adversarial examples: 0.9627
+MNIST_FGSM_adv_train_clean_eval
+MNIST_FGSM_adv_train_clean_eval accuracy 0.999496475327291
+MNIST_FGSM_adv_train_clean_eval precision 0.9990281827016521
+MNIST_FGSM_adv_train_clean_eval recall 1.0
+MNIST_FGSM_adv_train_clean_eval f1 0.9995138551288284
+Test accuracy on legitimate examples: 0.9995
+MNIST_FGSM_adv_train_adv_eval
+MNIST_FGSM_adv_train_adv_eval accuracy 0.9823766364551864
+MNIST_FGSM_adv_train_adv_eval precision 0.984390243902439
+MNIST_FGSM_adv_train_adv_eval recall 0.9815175097276264
+MNIST_FGSM_adv_train_adv_eval f1 0.9829517778860205
+Test accuracy on adversarial examples: 0.9824
+MNIST_FGSM_adv_train_clean_eval
+MNIST_FGSM_adv_train_clean_eval accuracy 0.999496475327291
+MNIST_FGSM_adv_train_clean_eval precision 0.9990281827016521
+MNIST_FGSM_adv_train_clean_eval recall 1.0
+MNIST_FGSM_adv_train_clean_eval f1 0.9995138551288284
+Test accuracy on legitimate examples: 0.9995
+MNIST_FGSM_adv_train_adv_eval
+MNIST_FGSM_adv_train_adv_eval accuracy 0.9853977844914401
+MNIST_FGSM_adv_train_adv_eval precision 0.9873170731707317
+MNIST_FGSM_adv_train_adv_eval recall 0.9844357976653697
+MNIST_FGSM_adv_train_adv_eval f1 0.985874330248417
+Test accuracy on adversarial examples: 0.9854
+MNIST_FGSM_adv_train_clean_eval
+MNIST_FGSM_adv_train_clean_eval accuracy 1.0
+MNIST_FGSM_adv_train_clean_eval precision 1.0
+MNIST_FGSM_adv_train_clean_eval recall 1.0
+MNIST_FGSM_adv_train_clean_eval f1 1.0
+Test accuracy on legitimate examples: 1.0000
+MNIST_FGSM_adv_train_adv_eval
+MNIST_FGSM_adv_train_adv_eval accuracy 0.986404833836858
+MNIST_FGSM_adv_train_adv_eval precision 0.992133726647001
+MNIST_FGSM_adv_train_adv_eval recall 0.9815175097276264
+MNIST_FGSM_adv_train_adv_eval f1 0.9867970660146699
+Test accuracy on adversarial examples: 0.9864
+MNIST_FGSM_adv_train_clean_eval
+MNIST_FGSM_adv_train_clean_eval accuracy 0.999496475327291
+MNIST_FGSM_adv_train_clean_eval precision 0.9990281827016521
+MNIST_FGSM_adv_train_clean_eval recall 1.0
+MNIST_FGSM_adv_train_clean_eval f1 0.9995138551288284
+Test accuracy on legitimate examples: 0.9995
+MNIST_FGSM_adv_train_adv_eval
+MNIST_FGSM_adv_train_adv_eval accuracy 0.9899295065458208
+MNIST_FGSM_adv_train_adv_eval precision 0.9912280701754386
+MNIST_FGSM_adv_train_adv_eval recall 0.9892996108949417
+MNIST_FGSM_adv_train_adv_eval f1 0.9902629016553067
+Test accuracy on adversarial examples: 0.9899
+MNIST_FGSM_adv_train_clean_eval
+MNIST_FGSM_adv_train_clean_eval accuracy 0.999496475327291
+MNIST_FGSM_adv_train_clean_eval precision 0.9990281827016521
+MNIST_FGSM_adv_train_clean_eval recall 1.0
+MNIST_FGSM_adv_train_clean_eval f1 0.9995138551288284
+Test accuracy on legitimate examples: 0.9995
+MNIST_FGSM_adv_train_adv_eval
+MNIST_FGSM_adv_train_adv_eval accuracy 0.9894259818731118
+MNIST_FGSM_adv_train_adv_eval precision 0.9912195121951219
+MNIST_FGSM_adv_train_adv_eval recall 0.9883268482490273
+MNIST_FGSM_adv_train_adv_eval f1 0.9897710667316123
+Test accuracy on adversarial examples: 0.9894
+MNIST_FGSM_train_adv_train_clean_eval
+MNIST_FGSM_train_adv_train_clean_eval accuracy 1.0
+MNIST_FGSM_train_adv_train_clean_eval precision 1.0
+MNIST_FGSM_train_adv_train_clean_eval recall 1.0
+MNIST_FGSM_train_adv_train_clean_eval f1 1.0
+MNIST_FGSM_train_adv_train_adv_eval
+MNIST_FGSM_train_adv_train_adv_eval accuracy 0.9977837970943118
+MNIST_FGSM_train_adv_train_adv_eval precision 0.9972895408163265
+MNIST_FGSM_train_adv_train_adv_eval recall 0.9984038308060654
+MNIST_FGSM_train_adv_train_adv_eval f1 0.9978463747307968
+Preparing the black-box model.
+Defined TensorFlow model graph.
+num_devices:  1
+None
+Preparing the black-box model.
+Defined TensorFlow model graph.
+num_devices:  1
+None
+Preparing the black-box model.
+Defined TensorFlow model graph.
+num_devices:  1
+None
