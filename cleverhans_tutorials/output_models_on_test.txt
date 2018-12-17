@@ -110,6 +110,7 @@ MNIST_FGSM_gaussian_None_gsma precision 0.9980582524271845
 MNIST_FGSM_gaussian_None_gsma recall 1.0
 MNIST_FGSM_gaussian_None_gsma f1 0.9990281827016521
 Test accuracy on adversarial examples: 0.9990
+###############################
 ../models/MNIST_FGSM_gaussian.joblib gaussian None
 MNIST_FGSM_gaussian_gaussian_None
 MNIST_FGSM_gaussian_gaussian_None accuracy 0.999496475327291

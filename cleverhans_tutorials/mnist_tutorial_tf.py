@@ -147,10 +147,15 @@ def mnist_tutorial(train_start=0, train_end=60000, test_start=0,
     train(sess, loss, x_train, y_train, evaluate=evaluate,
           args=train_params, rng=rng, var_list=model.get_params())
 
+    #Now, save the graph
+    with sess.as_default():
+        save("../models/CNN_{}.joblib".format(preprocess), model)
+
     # Calculate training error
     if testing:
       do_eval(preds, x_train, y_train, 'train_clean_train_clean_eval')
 
+    exit()
     # Initialize the Fast Gradient Sign Method (FGSM) attack object and
     # graph
     fgsm = FastGradientMethod(model, sess=sess)
